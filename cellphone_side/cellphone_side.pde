@@ -41,40 +41,21 @@ void setup()
    size(400,600);
 }
 
-Socket socket = null;
-PrintWriter out = null;
-
-/**only open the connection if it is not already open */
-void openConnection()
-{
-  try {
-    if(socket == null || !socket.isConnected())
-    {
-      InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
-      socket = new Socket(serverAddr, SERVERPORT); 
-      out = new PrintWriter(new BufferedWriter(
-                            new OutputStreamWriter(socket.getOutputStream())), true);
-    }
-  }
-  catch (Exception e)
-  {
-    fill(0,0,0);
-    rect(0,0,400,600);
-    fill(255,0,0);
-    text(e.getMessage(),10,40);    
-  }
-}
  
 void draw()
 {
   if(queue.size() > 0)
   {
-    Sms sms = queue.poll();
-    openConnection(); //open  or re-open depending on connection state
     try 
     {
+        InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
+        Socket socket = new Socket(serverAddr, SERVERPORT);
+        PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+        Sms sms = queue.poll();
         out.println(sms.number + SPLITTER + sms.message);
         out.flush();
+        delay(100);
+        out.close();
     } 
     catch (Exception e)
     {
@@ -83,8 +64,6 @@ void draw()
       fill(255,0,0);
       text(e.getMessage(),10,40);
     }
-    message = "";//reset message to be able to detect the next message
-    number = "";
   }
 }
  

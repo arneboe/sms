@@ -38,6 +38,7 @@ void setup() {
 
 void draw() { 
 
+  
   // Receive data from client
   Client c = s.available();
   if (c != null) {
@@ -100,13 +101,26 @@ void drawMessages()
 {
   background(0);
   fill(0, 255, 0);
-  textSize(20);
+  textSize(50);
+  text("Send", 20, 60);
+  line(0, 120, width, 120);
   int y = height - 40;
-  for(Sms sms : messages)
+  for(int i = messages.size() - 1; i >= 0; --i)
   {
-    text(sms.name + ": " + sms.message, 10, y, width - 40, y);
-    y -= 20;
-    if(y <= 0) break;
+    Sms sms = messages.get(i);
+    final String txt = sms.name + ": " + sms.message;
+    int size = 20;
+    textSize(size);
+    while(textWidth(txt) > width - 10)
+    {
+      --size;
+      textSize(size);
+    }
+    if(size <= 10) 
+      textSize(10);
+    text(txt, 10, y);
+    y -= 28;
+    if(y <= 120) break;
   }
 }
 
