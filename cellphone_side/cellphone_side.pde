@@ -32,6 +32,7 @@ LinkedBlockingQueue<Sms> queue = new LinkedBlockingQueue<Sms>();
 public void onCreate(Bundle savedInstanceState) 
 {
   super.onCreate(savedInstanceState);
+  getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //keep screen on
   IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");   
   getActivity().registerReceiver(mySMSReceiver, filter); // launch class when SMS are RECEIVED
 }
